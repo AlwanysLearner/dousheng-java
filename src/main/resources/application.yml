@@ -1,0 +1,17 @@
+server:
+  port: 9999
+
+spring:
+  datasource:
+    username: root
+    password: Ssy2000226..
+    url: jdbc:mysql:///dousheng
+  data:
+    redis:
+      port: 6379
+      host: localhost
+logging:
+  level:
+    com.ssy: debug
+jwt:
+  secret: dafsdfgfdowqiuekskj213214
