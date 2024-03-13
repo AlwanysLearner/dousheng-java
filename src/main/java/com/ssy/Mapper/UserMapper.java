@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserMapper {
     @Select("select * from t_user")
     List<User> findAll();
-    @Insert("insert into t_user(username,password) values (#{username},#{password})")
+    @Insert("insert into t_user(username,password,likes) values (#{username},#{password},#{likes})")
     Integer Create(User user);
     @Select("SELECT password FROM t_user where username=#{username}")
     String selectPasswordByUsername(String username);
@@ -19,6 +19,6 @@ public interface UserMapper {
     @Select("select count(*) from t_user where username=#{username}")
     int hasuser(String username);
 
-    @Select("select * from t_user where username=#{username}")
+    @Select("select id,likes from t_user where username=#{username}")
     User selectByName(String username);
 }

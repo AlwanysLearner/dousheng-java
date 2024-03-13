@@ -33,7 +33,7 @@ public class TokenAuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
         HttpSession newsession=request.getSession(true);
-        newsession.setAttribute("userinfo",userMapper.selectByName(validationResult.getMessage()));
+        newsession.setAttribute("userid",userMapper.selectByName(validationResult.getMessage()).getId());
         return true; // 如果Token有效，继续处理请求
     }
 }

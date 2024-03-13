@@ -15,6 +15,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenAuthenticationInterceptor)
-                .addPathPatterns("/dousheng/auth"); // 指定拦截器应用于所有/api/下的URL
+                .addPathPatterns("/dousheng/auth/*");
     }
 }
