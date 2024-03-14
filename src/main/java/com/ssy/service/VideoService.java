@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,9 +33,11 @@ public class VideoService {
         return videoMapper.Keywordinsert(videoid,keywords);
     }
     public void GetVideo(int userid){
+
         List<String> lokens=redisService.range(userid+":likes",0,4);
         if(redisService.keyExists(userid+":newLikes")){
-            Set<String> nlokens=redisService.getTopElements(userid+":newLikes",4);
+            Set<String> nlokens=redisService.getTopElements(userid+":newLikes",3);
+            nlokens.add("asdasdaf");//简易的概率跳出，让用户有机会接触到用户画像之外的视频。
             lokens=new ArrayList<>(nlokens);
             redisService.recreateList(userid+":likes",lokens);
             redisService.deleteKey(userid+":newLikes");
@@ -49,20 +52,27 @@ public class VideoService {
         int videoid= redisService.getElementByIndex(String.valueOf(userid),index);
         if(videoid ==-1){
             GetVideo(userid);
+            videoid= redisService.getElementByIndex(String.valueOf(userid),index);
         }
-        videoid= redisService.getElementByIndex(String.valueOf(userid),index);
         Video video=videoMapper.getVideoById(videoid);
+        redisService.incrementScore("热点视频",String.valueOf(videoid));//模拟热点视频
+        redisService.ensureMaxSize("热点视频",20);//防止热点视频无限增长
         List<String> lokens=videoMapper.videoLoken(videoid);
         for(int i=0;i<lokens.size();++i){
             redisService.incrementScore(userid+":newLikes",lokens.get(i));
         }
-
         if(userid>0){
             video.setIsfavourites(videoMapper.isFavourites(userid,videoid)==1);
         }
         return videoMapper.getVideoById(videoid);
     }
-
+    public void getHotVideo(int userid){
+        Set<String> hotVideo= redisService.getTopElements("热点视频",10);
+        List<String> hotVideoList=new ArrayList<>(hotVideo);
+        for(int i=0;i<hotVideoList.size();++i){
+            redisService.insertElementAtHead(String.valueOf(userid),String.valueOf(hotVideoList.get(i)));
+        }
+    }
     public int favourites(int userid,int videoid,int action){
         if(action==1){//点赞
             return videoMapper.dianzan(userid,videoid);

@@ -48,6 +48,11 @@ public class VideoController {
         return videoService.favourites(videoUpload.getUserid(),videoUpload.getVideoid(),videoUpload.getAction());
     }
 
+    @GetMapping("/video/hot")
+    public void HotVideo(int userid){
+        videoService.getHotVideo(userid);
+    }
+
     @GetMapping("/video/comment")
     public List<String> chakanComment(int videoid){
         return videoService.CommentList(videoid);

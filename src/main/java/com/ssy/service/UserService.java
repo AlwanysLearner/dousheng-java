@@ -36,9 +36,9 @@ public class UserService {
         if(PasswordEncryptionUtil.checkPassword(user.getPassword(),hashpassword)){
             User userinfo=userMapper.selectByName(user.getUsername());
             List<String> lokens=Arrays.asList(userinfo.getLikes().split(","));
-            redisService.deleteKey(userinfo.getId()+"likes");
+            redisService.deleteKey(userinfo.getId()+":likes");
             for(int i=0;i< lokens.size();++i){
-                redisService.insertElementAtHead(userinfo.getId()+"likes", lokens.get(i));
+                redisService.insertElementAtHead(userinfo.getId()+":likes", lokens.get(i));
             }
             httpRequest.getSession(true);//会话开启
             String token=tokenUtil.createToken(user.getUsername());

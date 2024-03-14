@@ -21,4 +21,6 @@ public interface UserMapper {
 
     @Select("select id,likes from t_user where username=#{username}")
     User selectByName(String username);
+    @Select("select likes from t_user where id=#{userid}")
+    String selectKeywordsById(int userid);
 }

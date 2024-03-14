@@ -50,7 +50,7 @@ public class RedisService {
         }
         String value = listOps.index(listKey, index);
         // 将检索到的字符串转换回整型
-        return value != null ? Integer.parseInt(value) : null;
+        return Integer.parseInt(value);
     }
     public List<String> range(String key, long start, long end) {
         ListOperations<String, String> listOps = redisTemplate.opsForList();
@@ -92,5 +92,17 @@ public class RedisService {
 
     public void deleteKey(String key){
         redisTemplate.delete(key);
+    }
+
+
+    public void ensureMaxSize(String key,int MAX_SIZE) {
+        long currentSize = stringRedisTemplate.opsForZSet().size(key);
+        if (currentSize > MAX_SIZE) {
+            // 计算需要移除的元素数量
+            long start = 0;
+            long end = -(MAX_SIZE - currentSize) - 1;
+            // 删除索引范围外的元素
+            stringRedisTemplate.opsForZSet().removeRange(key, start, end);
+        }
     }
 }

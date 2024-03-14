@@ -42,7 +42,7 @@ public interface VideoMapper {
     @Select("select comment from t_comment where videoid=#{videoid}")
     List<String> comment(int videoid);
 
-    @Insert("insert into t_comment(video,comment,commentid) values (#{videoid},#{comment},#{userid})")
+    @Insert("insert into t_comment(videoid,comment,commentid) values (#{videoid},#{comment},#{userid})")
     int makeComment(int videoid,int userid,String comment);
     @Select("select keyword from t_keyword where videoid=#{videoid}")
     List<String> videoLoken(int videoid);

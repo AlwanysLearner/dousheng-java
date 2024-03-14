@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 @SpringBootApplication
 @MapperScan("com.ssy.Mapper")
 public class DoushengApplication {
-
     public static void main(String[] args){
         SpringApplication.run(DoushengApplication.class, args);
     }
+
+
 }
