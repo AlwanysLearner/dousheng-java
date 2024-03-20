@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+// 指定生成代码的包名，这会影响生成的代码结构。
+option go_package = ".;chat";
+option java_package = "com.ssy.service";
+option java_outer_classname = "ChatProto";
+// 定义服务
+service Chat {
+  // 定义一个RPC方法。
+  rpc Chat (ChatRequest) returns (ChatResponse) {}
+}
+
+// 定义SayHello方法的请求消息
+message ChatRequest {
+  int64 producter = 1; // 发送端
+  int64 consumer=2;//接收端
+  string msg=3;
+}
+
+// 定义SayHello方法的响应消息
+message ChatResponse {
+  bool success = 1;  // 操作是否成功
+  string messageId = 2;  // 服务器生成的消息ID
+  string error = 3;  // 如果操作失败，这里包含错误信息
+}
